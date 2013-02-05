@@ -1,0 +1,15 @@
+*.pyc
+*.pyo
+*.tmp*
+*.sqlite
+*.db
+.idea
+.DS_Store
+.project
+.pydevproject
+.settings*
+*~
+.sass-cache
+media/uploaded_images
+docs
+env/
