@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+{% block nav %}
+{% endblock nav %}
+<!-- -->
+{% block content %}
+<div align="center">
+{% if results or resultswithout %}
+
+<p></p>&nbsp;&nbsp;&nbsp;&nbsp;
+
+{% block resultspara %}
+<p>Here is a result of item(s) reported lost with the id <strong>{{identity_number}} </strong></p>&nbsp;&nbsp;
+{% endblock resultspara %}
+
+
+{% block desc %}
+{% if results %}
+{% for item in results %}
+
+<p color="blue">Descriptions given:-</p>
+
+<table>
+<p><strong>Item Name</strong>: &nbsp; {{ item.item_name }}</p></td></tr>
+<tr><td><p><strong>Item Description</strong>: &nbsp; {{ item.item_description }}</p></tr></td>
+<tr><td><p><strong>Where Lost</strong>: &nbsp; {{ item.where_lost }}</p></tr></td>
+</table>
+{% endfor %}
+{% endif %}
+
+{% if resultswithout %}
+{% for item in resultswithout %}
+<table>
+<p><strong>Item Name</strong>: &nbsp; {{ item.item_name }}</p></td></tr>
+<tr><td><p><strong>Item Description</strong>: &nbsp; {{ item.item_description }}</p></tr></td>
+<tr><td><p><strong>Where Lost</strong>: &nbsp; {{ item.where_lost }}</p></tr></td>
+</table>
+{% endfor %}
+{% endif %}
+
+{% endblock desc %}
+
+
+{% else %}
+<table align="center">
+<tr>
+<td>
+&nbsp;
+<p>Thank you for the reporting the lost and found item.</p>
+<p>We will notify the owner of the details you gave if they come searching for it.</p>&nbsp;
+</td>
+</tr>
+</table>
+
+{% endif %}
+</div>
+{% endblock content %}
+

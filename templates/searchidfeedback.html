@@ -1,0 +1,76 @@
+{% extends "reportfeedback.html" %}
+{% block resultspara %}<p>Here is a result of item{{ item|pluralize:"s" }} reported found with the id <strong>{{identity_number}}</strong></p>&nbsp;&nbsp;{% endblock resultspara %}
+
+{% block desc %}
+
+{% if results %}
+{% for item in results %}
+
+<p color="blue">Descriptions given:-</p>
+<fieldset>
+<legend><p>The item was reported found in {{ item.location_kept }} </p></legend>
+<table border="0px" cellpadding="0px">
+<tr><td><p><strong>Item Name</strong>: &nbsp; {{ item.item_name }}</p></tr></td>
+<tr><td><p><strong>Item Description</strong>: &nbsp; {{ item.item_description }}</p></tr></td>
+<tr><td><p><strong>Where Found</strong>: &nbsp; {{ item.where_found }}</p></tr></td>
+<tr><td><p><strong>Item Color</strong>: &nbsp; {{ item.item_color }}</p></tr></td>
+<tr><td><p><strong>Location kept </strong>: &nbsp; {{ item.where_kept }}</p></tr></td>
+</table>
+</fieldset>
+{% endfor %}
+
+{% else %}
+
+
+<p>Thank you for the search of the lost item.</p>
+<p>We will notify you  if someone reports it.</p>&nbsp;
+
+
+{% endif %}
+{% if results %}
+{% for item in results %}
+<p>Map Overview of {{item.location_kept|upper }}</p>
+{% endfor %}
+{% endif %}
+               
+			
+						<div class="bigMap"> 
+                                                       <div class="fullimg" id="mapOverview"></div>
+                                                </div>
+				
+		
+
+<p>-----------------------------------------------------------------------------------</p>
+{% endblock desc %}
+
+{% block extrajs %}
+
+
+<script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?key={{ GOOGLE_MAPS_API_KEY }}&sensor=false"></script>
+	<script type="text/javascript">
+		(function()
+		{
+			var mapOptions =
+			{
+				center: new google.maps.LatLng({{ location_lat}}, {{ location_lon }}),
+				zoom: 12,
+				mapTypeId: google.maps.MapTypeId.ROADMAP
+			};
+			var mapOverview = new google.maps.Map(document.getElementById("mapOverview"), mapOptions);
+			
+	 			var newMarker = new google.maps.Marker(
+	 			{
+	 				map: mapOverview,
+	 				position: new google.maps.LatLng({{ location_lat}}, {{ location_lon }}),
+	 				title: '{{ siteobj.name }}'
+	 			});
+				google.maps.event.addListener(newMarker, 'click', function()
+				{
+					window.location = '{{ site.get_url }}';
+				});
+			
+		})();
+	</script>
+
+
+{% endblock extrajs %}

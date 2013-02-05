@@ -1,0 +1,41 @@
+<html>
+<head>
+<style type="text/css"> 
+P { text-align: center }
+li {text-align: center}
+</style>
+<script type="text/javascript" src="/static/scripts/jQuery.js"></script>
+<script type="text/javascript" sc="" ></script>
+</head>
+<body bgcolor="lightblue">
+<div id=se >
+
+<table align="center"  width="500">
+<tr>
+<td>
+<a href="/searchandreport/reportlost/"><img src="{{STATIC_URL}}hp_report_found_item.jpg" border="0"/></a>
+<div align="center">Fill in the following fields</div>
+
+<form method='POST' action=/searchandreport/reportlostw/>
+<table  align="center" bgcolor="green">
+<tr><td>
+{% csrf_token %} 
+{{form1.as_table}}
+</td></tr>
+<tr><td>
+<p text-align="center"> <input type="submit" name="submit"></p>
+</tr></td>
+
+</table>
+
+
+</form>
+</td>
+</tr>
+</table>
+
+
+</div>
+</body>
+</html>
+

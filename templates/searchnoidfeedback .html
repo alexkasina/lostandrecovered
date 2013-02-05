@@ -1,0 +1,80 @@
+{% extends "reportfeedback.html" %}
+{% block resultspara %}<p>Here is a result of item(s) reported found which matches some of descriptions of your item <strong>{{item_name}}</strong>.</p>&nbsp;&nbsp;{% endblock resultspara %}
+{% block desc %}
+
+{% if results %}
+
+
+{% for result in results %}
+  <p>Item {{ forloop.counter }} </p>
+
+<p>The item was reported found in {{ result.location_kept }} </p>
+<table>
+
+<tr><td><p><strong>Item Name</strong>: &nbsp; {{ result.item_name }}</p></tr></td>
+
+<tr><td><p><strong>Item category</strong>: &nbsp; {{ result.item_category }}</p></tr></td>
+
+<tr><td><p><strong>Item color</strong>: &nbsp; {{ result.item_color }}</p></tr></td>
+
+<tr><td><p><strong>Item Description</strong>: &nbsp; {{ result.item_description }}</p></tr></td>
+
+<tr><td><p><strong>Where Lost</strong>: &nbsp; {{ result.where_found }}</p></tr></td>
+
+<tr><td><p><strong>Where kept</strong>: &nbsp; {{ result.location_kept }}</p></tr></td>
+
+</table>
+
+
+<p>Map Overview of {{ result.location_kept|upper }} </p>
+    
+
+    <div class="bigMap"> 
+                <div class="fullimg" id="mapOverview{{ forloop.counter }}"></div>
+    </div>
+<p>-----------------------------------------------------------------------------------</p>
+{% block extrajs %}
+
+
+<script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?key={{ GOOGLE_MAPS_API_KEY }}&sensor=false"></script>
+	<script type="text/javascript">
+		(function()
+		{
+			var mapOptions =
+			{
+				center: new google.maps.LatLng({{ location_lat}}, {{ location_lon }}),
+				zoom: 12,
+				mapTypeId: google.maps.MapTypeId.ROADMAP
+			};
+			var mapOverview = new google.maps.Map(document.getElementById("mapOverview{{ forloop.counter }}"), mapOptions);
+			
+	 			var newMarker = new google.maps.Marker(
+	 			{
+	 				map: mapOverview,
+	 				position: new google.maps.LatLng({{ location_lat}}, {{ location_lon }}),
+	 				title: '{{ result.name }}'
+	 			});
+				google.maps.event.addListener(newMarker, 'click', function()
+				{
+					window.location = '{{ site.get_url }}';
+				});
+			
+		})();
+	</script>
+
+
+{% endblock extrajs %}
+
+{% endfor %}
+
+{% else %}
+
+
+<p>Thank you for the search of the lost item. </p>
+<p>We will notify you if someone reports it.</p>&nbsp;
+
+{% endif %}
+
+{% endblock desc %}
+
+

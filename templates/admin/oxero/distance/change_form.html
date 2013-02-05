@@ -1,0 +1,147 @@
+{% extends "admin/base_site.html" %}
+{% load i18n admin_static admin_modify %}
+{% load url from future %}
+{% load admin_urls %}
+
+{% block extrahead %}{{ block.super }}
+{% url 'admin:jsi18n' as jsi18nurl %}
+<script type="text/javascript" src="{{ jsi18nurl|default:"../../../jsi18n/" }}"></script>
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" ></script>
+<script type="text/javascript">
+$(function(){
+  alert('Hello World');
+});
+</script>
+<script src="http://maps.google.com/maps?file=api&v=2&key=AIzaSyBW31O_GlQFEMIWiRmoYPexJpi5N9HaSZw"   type="text/javascript ">
+$(document).ready(function(){
+  $("#id_point_a, #id_point_b").change(function(){
+     if ($('#id_point_a' && '#id_point_b').val()) {
+
+
+
+
+
+
+	var city1=$('#id_point_a').val();
+	var city2=$('#id_point_b').val();
+	
+	var geocoder, location1, location2, miledistance, kmdistance;
+	geocoder = new GClientGeocoder();
+	geocoder.getLocations(city1, function (response) {
+	if (!response || response.Status.code != 200)
+		{
+		alert("Sorry, we were unable to geocode point a");
+	}
+	else
+		{
+		location1 = {lat: response.Placemark[0].Point.coordinates[1],
+		lon: response.Placemark[0].Point.coordinates[0],
+		address: response.Placemark[0].address
+		};
+		geocoder.getLocations(city2, function (response)
+		{
+		if (!response || response.Status.code != 200)
+		{
+		alert("Sorry, we were unable to geocode point b");
+		}
+		else
+		{
+		location2 = {lat: response.Placemark[0].Point.coordinates[1],
+		lon:response.Placemark[0].Point.coordinates[0],
+		address: response.Placemark[0].address};
+		try
+		{
+		var glatlng1 = new GLatLng(location1.lat, location1.lon);
+		var glatlng2 = new GLatLng(location2.lat, location2.lon);
+		miledistance= glatlng1.distanceFrom(glatlng2, 3959).toFixed(1);
+		kmdistance=(miledistance * 1.609344).toFixed(1);
+		kmdistance=(kmdistance*1).toFixed(-1);
+
+		$.post('scripts/search_stamps_by_city.jsp', {distance:kmdistance},function(data){
+		$('.each_stamp').hover(
+		function(){ $(this).css({'background-color' : ' #b4aeae '});},
+		function(){ $(this).css({'background-color' : '#ddd7d7', 'font-weight':'normal'});}
+		);});
+		} catch (error){alert(error);}}});} });
+
+
+
+          alert("Done!");
+
+    
+
+   }
+
+});
+
+</script>
+{{ media }}
+{% endblock %}
+
+{% block extrastyle %}{{ block.super }}<link rel="stylesheet" type="text/css" href="{% static "admin/css/forms.css" %}" />{% endblock %}
+
+{% block coltype %}{% if ordered_objects %}colMS{% else %}colM{% endif %}{% endblock %}
+
+{% block bodyclass %}{{ opts.app_label }}-{{ opts.object_name.lower }} change-form{% endblock %}
+
+{% if not is_popup %}
+{% block breadcrumbs %}
+<div class="breadcrumbs">
+<a href="{% url 'admin:index' %}">{% trans 'Home' %}</a>
+&rsaquo; <a href="{% url 'admin:app_list' app_label=opts.app_label %}">{{ app_label|capfirst|escape }}</a>
+&rsaquo; {% if has_change_permission %}<a href="{% url opts|admin_urlname:'changelist' %}">{{ opts.verbose_name_plural|capfirst }}</a>{% else %}{{ opts.verbose_name_plural|capfirst }}{% endif %}
+&rsaquo; {% if add %}{% trans 'Add' %} {{ opts.verbose_name }}{% else %}{{ original|truncatewords:"18" }}{% endif %}
+</div>
+{% endblock %}
+{% endif %}
+
+{% block content %}<div id="content-main">
+{% block object-tools %}
+{% if change %}{% if not is_popup %}
+  <ul class="object-tools">
+    {% block object-tools-items %}
+    <li><a href="history/" class="historylink">{% trans "History" %}</a></li>
+    {% if has_absolute_url %}<li><a href="../../../r/{{ content_type_id }}/{{ object_id }}/" class="viewsitelink">{% trans "View on site" %}</a></li>{% endif%}
+    {% endblock %}
+  </ul>
+{% endif %}{% endif %}
+{% endblock %}
+<form {% if has_file_field %}enctype="multipart/form-data" {% endif %}action="{{ form_url }}" method="post" id="{{ opts.module_name }}_form">{% csrf_token %}{% block form_top %}{% endblock %}
+<div>
+{% if is_popup %}<input type="hidden" name="_popup" value="1" />{% endif %}
+{% if save_on_top %}{% block submit_buttons_top %}{% submit_row %}{% endblock %}{% endif %}
+{% if errors %}
+    <p class="errornote">
+    {% blocktrans count counter=errors|length %}Please correct the error below.{% plural %}Please correct the errors below.{% endblocktrans %} 
+    </p>
+    {{ adminform.form.non_field_errors }}
+{% endif %}
+
+{% block field_sets %}
+{% for fieldset in adminform %}
+  {% include "admin/includes/fieldset.html" %}
+{% endfor %}
+{% endblock %}
+
+{% block after_field_sets %}{% endblock %}
+
+{% block inline_field_sets %}
+{% for inline_admin_formset in inline_admin_formsets %}
+    {% include inline_admin_formset.opts.template %}
+{% endfor %}
+{% endblock %}
+
+{% block after_related_objects %}{% endblock %}
+
+{% block submit_buttons_bottom %}{% submit_row %}{% endblock %}
+
+{% if adminform and add %}
+   <script type="text/javascript">document.getElementById("{{ adminform.first_field.id_for_label }}").focus();</script>
+{% endif %}
+
+{# JavaScript for prepopulated fields #}
+{% prepopulated_fields_js %}
+
+</div>
+</form></div>
+{% endblock %}

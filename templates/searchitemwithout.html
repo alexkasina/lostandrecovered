@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+
+{% block content %}
+ <form method='POST' action=/searchandreport/searchw/>
+   <div  align="center"  class="divMainTable2" >
+      <div align="center">Fill in the following fields to the best of our knowledge, inorder to enable easy search of the item you are reporting</div>
+      <div style="height:10px;"></div>
+      <div  align="center"  class="divSmallTables" >
+         <table id='t2' style="height:25px;" width="100%" bgcolor="lightblue">
+           <tr>
+             <td>
+               <div align="center"><strong>personal information</strong></div>
+             </td>
+           </tr>
+         </table><br></br>
+         <table>
+          {% csrf_token %} 
+          {{formPi.as_table}}
+         </table>
+         <div style="height:10px;"></div>
+       </div>
+       <div>&nbsp;<div>
+       <div  align="center"  class="divSmallTables" > 
+           <table id='t3' style="height:25px;" width="100%" bgcolor="lightblue">
+              <tr>
+                 <td>
+	          <div align="center"><strong>Item information</strong></div>
+                 </td>
+               </tr>
+              </table><br></br>
+	      <table>
+		  {% csrf_token %} 
+                  {{formIi.as_table}} 
+	      </table>
+              </div>
+	      <div style="height:10px;"></div>
+      <div><p style="text-align:center;"><input type="submit" class="btn btn-primary" name="submit"></p></div>
+   </div>
+ </form>
+
+{% endblock content %}
+

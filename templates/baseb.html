@@ -1,0 +1,199 @@
+{% load i18n %}
+
+<!DOCTYPE html>
+
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<title>Drive Your Holidays</title>
+		<link rel="shortcut icon" type="image/x-icon" href="{{ STATIC_URL }}images/favicon.ico">
+		<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}style/css/basestyle.css" />
+		<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}style/css/override.css" />
+		<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}style/tango/skin.css" />
+		<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}style/css/jquery.lightbox-0.5.css" media="screen" />
+		<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}style/ui-lightness/jquery-ui-1.8.21.custom.css" />
+	</head>
+	<body>
+		<!-- Start Navbar -->
+		<div class="navbar">
+			<div class="navbar-inner ox-navbar-inner">
+				<div class="container">
+					<!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+					<a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+						<span class="icon-bar"></span>
+						<span class="icon-bar"></span>
+						<span class="icon-bar"></span>
+					</a>
+					<ul class="nav ox-nav">
+						<li class="active"><a href="#"><span>{% trans "West USA" %}</span></a></li>
+						<li><a href="#"><span>{% trans "Florida" %}</span></a></li>
+						<li><a href="#"><span>{% trans "Australia" %}</span></a></li>
+						<li><a href="#"><span>{% trans "Canada" %}</span></a></li>
+					</ul>
+					<div class="nav-collapse pull-right ox-nav-collapse">
+						<div class="top-social pull-left">
+							<a href="#" class="fb">facebook</a>
+							<a href="#" class="tw">twitter</a>
+						</div>
+						<form class="form-search pull-left ox-top-searchform" action="{% url search %}" method="get">
+							<input type="text" class="input-medium search-query" name="query">
+							<input type="submit" class="btn" value="" />
+						</form>
+						<form id="language_form" action="{% url set_language %}" method="post" class="pull-left lang-form form-horizontal">
+							{% csrf_token %}
+							<div class="controls">
+								<label class="pull-left">Language: </label>
+								<select id="selectlang" name="language">
+									<option value="en" {% if LANGUAGE_CODE == 'en' %}selected="selected"{% endif %}>{% trans "English" %}</option>
+									<option value="fr" {% if LANGUAGE_CODE == 'fr' %}selected="selected"{% endif %}>{% trans "French" %}</option>
+								</select>
+							</div>
+						</form>
+						<ul class="pull-left login listalignleft unstyled">
+							{% if user.is_authenticated %}
+								<li><a href="{% url logout %}"><span>{% trans "Logout" %}</span></a></li>
+							{% else %}
+								<li><a href="#" data-toggle="modal" data-target="#loginModal"><span>{% trans "Log In" %}</span></a></li>
+								<li>|</li>
+								<li><a href="#" data-toggle="modal" data-target="#signupModal"><span>{% trans "Sign Up" %}</span></a></li>
+							{% endif %}
+						</ul>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!-- End Navbar -->
+		<!-- Start Page Body -->
+		<div class="container page-body-container">
+			<div class="container-fluid page-body">
+				<!-- Start Page Header -->
+				<div class="row-fluid">
+					<div class="span4 logo"><a href="{% url home %}"><img src="{{ STATIC_URL }}images/logo.png" alt="{% trans 'Oxero Logo' %}"></a></div>
+					<div class="span8 mainNav">
+						<ul class="unstyled">
+							<li><a href="{% url home %}" class="active"><span>{% trans "Home" %}</span></a></li>
+							<li>|</li>
+							<li class="dropdown">
+								<a href="{% url explore %}"><span>{% trans "Explore Region" %}</span></a>
+								<ul class="dropdown-menu">
+									<li><a href="{% url explore %}">{% trans "Overview" %}</a></li>
+									<li><a href="{% url itineraryexamples %}">{% trans "Itinerary Examples" %}</a></li>
+									<li><a href="{% url sites %}">{% trans "Sites" %}</a></li>
+								</ul>
+							</li>
+							<li>|</li>
+							<li><a href="{% url personalize %}"><span>{% trans "Design Your Trip" %}</span></a></li>
+							<li>|</li>
+							<li><a href="{% url info %}">{% trans "Useful Information" %}</a></li>
+						</ul>
+					</div>
+				</div>
+				<div class="row-fluid headerimage-wrapper">
+					<div class="orangeHori"></div>
+					<a href="{% url personalize %}" class="customtrip btn btn-warning">{% trans "DESIGN YOUR OWN TRIP NOW" %}</a>
+					<img src="{{ STATIC_URL }}images/headerimage.jpg" alt="{% trans 'Oxero Header Image' %}"/>
+				</div>
+				<!-- End Page Header -->
+				<!-- Start Page Content -->
+				<div class="container-fluid pagecontent-container">
+					{% block content %}{% endblock content %}
+				</div>
+				<!-- End Page Content -->
+				<!-- Modals -->
+				<div class="modal hide fade" id="loginModal">
+					<div class="modal-header">
+						<h3>{% trans "Log In" %}</h3>
+					</div>
+					<div class="modal-body">
+						<div class="row-fluid">
+							<div class="span12">
+								<form class="well side-signup" id="login_form">
+									<label>{% trans "Email" %}: <input name="email" type="text" class="span12" placeholder="" /></label>
+									<label>{% trans "Password" %}: <input name="password" type="password" class="span12" placeholder="" /></label>
+									<button type="submit" class="btn">{% trans "Log in" %}</button>
+									<p>{% trans "Lost password" %}? <a href="#" data-dismiss="modal" data-toggle="modal" data-target="#resetPasswordModal">{% trans "Click here" %}.</a></p>
+								</form>
+							</div>
+						</div>
+					</div>
+					<div class="modal-footer">
+						<a href="#" class="btn" data-dismiss="modal">{% trans "Cancel" %}</a>
+					</div>
+				</div>
+				<div class="modal hide fade" id="resetPasswordModal">
+					<div class="modal-header">
+					<h3>{% trans "Reset Password" %}</h3>
+					</div>
+					<div class="modal-body">
+						<div class="row-fluid">
+							<div class="span12">
+								<form class="well side-signup" id="reset_password_form">
+									<label>{% trans "Email" %}: <input name="email" type="text" class="span12" placeholder="" /></label>
+									<button type="submit" class="btn">{% trans "Reset password" %}</button>
+								</form>
+							</div>
+						</div>
+					</div>
+					<div class="modal-footer">
+						<a href="#" class="btn" data-dismiss="modal">{% trans "Cancel" %}</a>
+					</div>
+				</div>
+				<div class="modal hide fade" id="signupModal">
+					<div class="modal-header">
+						<h3>{% trans "Sign Up" %}</h3>
+					</div>
+					<div class="modal-body">
+						<div class="row-fluid">
+							<div class="span12">
+								<form class="well side-signup" id="signup_form">
+									<label>{% trans "First Name" %}: <input name="first_name" type="text" class="span12" placeholder="" /></label>
+									<label>{% trans "Last Name" %}: <input name="last_name" type="text" class="span12" placeholder="" /></label>
+									<label>{% trans "Email" %}: <input name="email" type="text" class="span12" placeholder="" /></label>
+									<label>{% trans "Country" %}: <input name="country" type="text" class="span12" placeholder="" /></label>
+									<label>{% trans "Password" %}: <input name="password" type="password" class="span12" placeholder="" /></label>
+									<label>{% trans "Confirm Password" %}: <input name="confirm_password" type="password" class="span12" placeholder="" /></label>
+									<button type="submit" class="btn">{% trans "Sign up" %}</button>
+								</form>
+								<div class="registration_completed">
+									<p>{% trans "You have successfully completed the sign up process. Please check your inbox for your confirmation email." %}</p>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="modal-footer">
+						<a href="#" class="btn" data-dismiss="modal">{% trans "Close" %}</a>
+					</div>
+				</div>
+				<!-- Footer -->
+				<div class="row-fluid"><div class="orangeHori"></div></div>
+				<div class="row-fluid footer">
+					<div class="span12">
+						<div class="span6">
+							<p>{% trans "Copyright 2012 DriveYourHolidays All Rights Reserved." %}</p>
+						</div>
+						<div class="span6">
+							<ul class="unstyled listalignleft pull-right">
+								<li><a href="{% url aboutus %}">{% trans "About Us" %}</a></li>
+								<li>|</li>
+								<li><a href="{% url advertising %}">{% trans "Advertising" %}</a></li>
+								<li>|</li>
+								<li><a href="{% url contactus %}">{% trans "Contact Us" %}</a></li>
+								<li>|</li>
+								<li><a href="{% url legal %}">{% trans "Legal" %}</a></li>
+							</ul>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!-- End Page Body -->
+		<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+		<script type="text/javascript" src="{{ STATIC_URL }}script/jquery.jcarousel.min.js"></script>
+		<script type="text/javascript" src="{{ STATIC_URL }}script/jquery.lightbox-0.5.js"></script>
+		<script type="text/javascript" src="{{ STATIC_URL }}script/jquery-ui-1.8.21.custom.min.js"></script>
+		<script type="text/javascript" src="{{ STATIC_URL }}script/bootstrapjs/bootstrap.min.js"></script>
+		<script type="text/javascript" src="{{ STATIC_URL }}script/mustache.js"></script>
+		<script type="text/javascript" src="{{ STATIC_URL }}script/api.js"></script>
+		{% block extraJS %}{% endblock extraJS %}
+	</body>
+</html>

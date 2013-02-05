@@ -1,0 +1,58 @@
+<html>
+<head>
+<title>{% block title %} Search and Report.com: Online item searching {% endblock title %}</title>
+<link type="text/css" rel="stylesheet" href="/static/style/css/style.css"> 
+<link href="/static/bootstrap/css/bootstrap-responsive.css" rel="stylesheet">
+<link href="/static/bootstrap/css/bootstrap.css" rel="stylesheet">
+</head>
+<body onload="initialize()" bgcolor="#ccc" leftmargin="0" topmargin="0" vlink="#4080ff" lang="EN-US" link="#0033CC" marginheight="0" marginwidth="0">
+
+<div class="divMainTable">
+{% block header %}
+   <table id='t1' width="100%" style="height:100px; border-bottom: 2px  solid; -moz-border-radius: 20px; -webkit-border-radius: 20px; border-radius: 20px; color:#44ccff">
+       <tr><td>
+          <div><span id="p1"><strong>Search and Report</strong></span><span style="float:right;"><a style="color:white" href="/searchandreport/"><strong>HOME</strong></a></span></div><div></div>
+       </td></tr>
+       <tr><td>
+          <p id="p2"><strong>Online searching and reporting of lost items</strong></p>
+       </td></tr>
+   </table>
+{% endblock header %}
+{% block nav %}  
+   <table style="height:60px; border-bottom: 2px  solid;">
+    <tr>
+      <td width="25%"  valign="top">
+       <a href="/searchandreport/search/"><img src="{{STATIC_URL}}hp_report_lost_item2.jpg" border="0" /></a></td>
+      <td width="25%" valign="top">
+       <a href="/searchandreport/report/"><img src="{{STATIC_URL}}hp_report_found_item.jpg" border="0"></a></td>
+      <td>
+       <a href="/searchandreport/searchw/"><img src="{{STATIC_URL}}hp_report_lost_item1.jpg" border="0" /></a></td>
+      </tr>
+    </table>
+{% endblock nav %}
+{% block content %}{% endblock content %}
+						<div class="span12" id="divFooter" style=" -moz-border-radius: 10px; -webkit-border-radius: 10px; border-radius: 20px; border: 1px solid;">
+							<div class="span6"> 
+	                                                        <div align="left" id="lil"><ul  class="unstyled listalignleft pull-right" style="list-style-type: none;">
+		                                                        <li id="lil"><p>&copy; 2012 LostAndRecovered, All Rights Reserved.</p></li>
+                                                                </ul></div>
+                                                                <div align="right" id="lir"><ul>
+
+									<li id="lir"><a href="#">About Us</a></li>
+									<li id="lir">|</li>
+									<li sid="lir"><a href="#">Advertising</a></li>
+									<li id="lir">|</li>
+									<li id="lir"><a href="#">Contact Us</a></li>
+									
+								</ul></div>
+							</div>
+						</div>
+</div>			
+
+<script src="/static/scripts/jQuery.js" type="text/javascript"></script>
+<script src="/static/scripts/api.js" type="text/javascript"></script>
+<script src="/static/scripts/load.js" type="text/javascript"></script>
+<script src="/static/bootstrap/js/jquery-1.8.1.min.js" type="text/javascript"></script>
+{% block extrajs %}{% endblock extrajs %}
+</body>
+</html>
