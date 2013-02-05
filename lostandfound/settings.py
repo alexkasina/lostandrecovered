@@ -167,3 +167,6 @@ LOGGING = {
 
 CRISPY_TEMPLATE_PACK = 'bootstrap'
 GOOGLE_MAPS_API_KEY ='AIzaSyBW31O_GlQFEMIWiRmoYPexJpi5N9HaSZw'
+
+import dj_database_url
+DATABASES['default'] =  dj_database_url.config()
