@@ -24,4 +24,6 @@ urlpatterns = patterns('',
      #url(r'^searchandreport/reportlostw/$', 'lostandfound.theapp.views.report_without'),
       url(r'^searchandreport/searchw/$', 'lostandfound.theapp.views.search_without'),
      url(r'^thanks/$', 'lostandfound.theapp.views.thanks'),
+     #url(r'^thanks/$', 'lostandfound.theapp.views.thanks'),
+     #url(r'^thanks/$', 'lostandfound.theapp.views.thanks'),
 )
