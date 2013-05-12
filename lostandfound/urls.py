@@ -26,4 +26,6 @@ urlpatterns = patterns('',
      url(r'^thanks/$', 'lostandfound.theapp.views.thanks'),
      #url(r'^thanks/$', 'lostandfound.theapp.views.thanks'),
      #url(r'^thanks/$', 'lostandfound.theapp.views.thanks'),
+     #url(r'^thanks/$', 'lostandfound.theapp.views.thanks'),
+
 )
